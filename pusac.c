@@ -57,7 +57,7 @@ int main(int argc, char **argv)
         memcpy(bufWrite.mtext, text, strlen(text) + 1);
 
         if (bufRead.mtext[0] == '0' + i) {
-            printf("%d. pusac dobio svoj materijal.", i);
+            printf("%d. pusac dobio svoj materijal.\n", i);
         }
         bufWrite.mtype = 1;
 
