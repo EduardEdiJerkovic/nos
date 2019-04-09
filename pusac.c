@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 
     int i = argv[1][0] - '0';
     keyRead = 1000 + i;
-    keyWrite = 2000 + i;
+    keyWrite = 2000;
     
     if ((msgReadId = msgget(keyRead, 0600 | IPC_CREAT)) == -1) {
         perror("msgget");
@@ -51,18 +51,16 @@ int main(int argc, char **argv)
             exit(1);
         }
 
-        printf("%d. pusac dobio %c poruku.\n", i, bufRead.mtext[0]);
-
-        text[0] = bufRead.mtext[0];
-        memcpy(bufWrite.mtext, text, strlen(text) + 1);
+        printf("%d. pusac got material type %c.\n", i, bufRead.mtext[0]);
 
         if (bufRead.mtext[0] == '0' + i) {
-            printf("%d. pusac dobio svoj materijal.\n", i);
-        }
-        bufWrite.mtype = 1;
-
-        if (msgsnd(msgWriteId, (struct msgbuf *)&bufWrite, sizeof(text), 0) == -1) {
-            perror("msgsnd");
+            printf("%d. pusac took the material.\n", i);
+            text[0] = bufRead.mtext[0];
+            memcpy(bufWrite.mtext, text, strlen(text) + 1);
+            bufWrite.mtype = 1;
+            if (msgsnd(msgWriteId, (struct msgbuf *)&bufWrite, sizeof(text), 0) == -1) {
+                perror("msgsnd");
+            }
         }
     }
 
